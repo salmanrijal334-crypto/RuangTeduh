@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primafest – Masuk / Daftar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cyan: #00c3ff;
+            --cyan-dark: #0077ff;
+            --green: #2ecc71;
+            --purple: #9b59b6;
+            --bg: #0d1117;
+            --bg2: #161b22;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d1117, #161b22);
+            font-family: 'Outfit', sans-serif;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(0, 195, 255, 0.07) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Decorative blobs */
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0,195,255,0.06), transparent 70%);
+            top: -100px;
+            left: -100px;
+        }
+
+        .blob-2 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(155,89,182,0.06), transparent 70%);
+            bottom: -80px;
+            right: -80px;
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* ── BACK LINK ── */
+        .back-link {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,0.55);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover { color: var(--cyan); }
+
+        /* ── LOGO ── */
+        .logo {
+            position: relative;
+            z-index: 1;
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 40%, var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .logo-sub {
+            position: relative;
+            z-index: 1;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.4);
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        /* ── AUTH CARD ── */
+        .auth-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 440px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(0, 195, 255, 0.2);
+            border-radius: 28px;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            box-shadow:
+                0 0 0 1px rgba(0,195,255,0.08),
+                0 24px 80px rgba(0,0,0,0.5),
+                inset 0 1px 0 rgba(255,255,255,0.07);
+            overflow: hidden;
+        }
+
+        /* ── TABS ── */
+        .tab-bar {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .tab-btn {
+            padding: 18px;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.4);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--cyan);
+            background: rgba(0,195,255,0.05);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--cyan);
+            border-radius: 2px 2px 0 0;
+        }
+
+        /* ── FORM PANELS ── */
+        .form-panel {
+            padding: 36px;
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-panel.active {
+            display: flex;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.55);
+            letter-spacing: 0.4px;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            padding: 13px 16px;
+            outline: none;
+            transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--cyan);
+            background: rgba(0,195,255,0.06);
+            box-shadow: 0 0 0 3px rgba(0,195,255,0.12);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255,255,255,0.22);
+        }
+
+        /* Input with icon */
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+            pointer-events: none;
+        }
+
+        .input-wrap .form-input {
+            padding-left: 42px;
+        }
+
+        /* Toggle password */
+        .toggle-pwd {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.35);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            transition: color 0.2s ease;
+            padding: 0;
+        }
+
+        .toggle-pwd:hover { color: var(--cyan); }
+
+        /* Role selector */
+        .role-select-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .role-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px;
+            background: rgba(255,255,255,0.04);
+            border: 1.5px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .role-btn:hover {
+            border-color: rgba(0,195,255,0.35);
+            background: rgba(0,195,255,0.05);
+        }
+
+        .role-btn.selected {
+            border-color: var(--cyan);
+            background: rgba(0,195,255,0.1);
+            color: var(--cyan);
+            box-shadow: 0 0 16px rgba(0,195,255,0.15);
+        }
+
+        .role-emoji { font-size: 1.8rem; }
+        .role-label { font-size: 0.82rem; font-weight: 700; }
+        .role-hint { font-size: 0.7rem; opacity: 0.7; text-align: center; }
+
+        /* Checkbox */
+        .checkbox-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.5;
+        }
+
+        .checkbox-row input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            accent-color: var(--cyan);
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .checkbox-row a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        /* Submit button */
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+            border: none;
+            border-radius: 14px;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 20px rgba(0,195,255,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(0,195,255,0.45);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn .btn-loader {
+            display: none;
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(255,255,255,0.4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.2);
+            font-size: 0.78rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Social logins */
+        .social-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: rgba(255,255,255,0.75);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .social-btn:hover {
+            border-color: rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+
+        /* Forgot password link */
+        .forgot-link {
+            text-align: right;
+            font-size: 0.8rem;
+        }
+
+        .forgot-link a {
+            color: rgba(0,195,255,0.75);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .forgot-link a:hover { color: var(--cyan); }
+
+        /* Alert */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: none;
+        }
+
+        .alert-error {
+            background: rgba(231,76,60,0.12);
+            border: 1px solid rgba(231,76,60,0.3);
+            color: #e74c3c;
+        }
+
+        .alert-success {
+            background: rgba(46,204,113,0.12);
+            border: 1px solid rgba(46,204,113,0.3);
+            color: var(--green);
+        }
+
+        /* ── FAMILY LINK QUICK ACCESS ── */
+        .quick-access {
+            position: relative;
+            z-index: 1;
+            margin-top: 28px;
+            padding: 20px 24px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 440px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .quick-access:hover {
+            border-color: rgba(46,204,113,0.35);
+            background: rgba(46,204,113,0.04);
+        }
+
+        .qa-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .qa-icon {
+            width: 42px;
+            height: 42px;
+            background: rgba(46,204,113,0.12);
+            border: 1px solid rgba(46,204,113,0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .qa-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .qa-sub {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.4);
+            margin-top: 2px;
+        }
+
+        .qa-arrow {
+            color: var(--green);
+            font-size: 1.1rem;
+        }
+
+        /* ── SUCCESS STATE ── */
+        .success-overlay {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 36px;
+            text-align: center;
+            gap: 16px;
+        }
+
+        .success-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(46,204,113,0.15);
+            border: 1.5px solid rgba(46,204,113,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .success-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .success-sub {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.6;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 480px) {
+            .form-panel { padding: 24px; }
+            .role-select-row { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <a href="landing.html" class="back-link">
+        ← Kembali ke Beranda
+    </a>
+
+    <div class="logo">Primafest</div>
+    <div class="logo-sub">Mood & Family Wellness Tracker</div>
+
+    <div class="auth-card" id="auth-card">
+
+        <!-- TABS -->
+        <div class="tab-bar">
+            <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Masuk</button>
+            <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Daftar</button>
+        </div>
+
+        <!-- ── LOGIN PANEL ── -->
+        <div class="form-panel active" id="panel-login">
+            <div class="alert alert-error" id="login-error"></div>
+
+            <div>
+                <label class="form-label">Email</label>
+                <div class="input-wrap">
+                    <span class="input-icon">📧</span>
+                    <input class="form-input" type="email" id="login-email" placeholder="nama@email.com" autocomplete="email">
+                </div>
+            </div>
+
+            <div>
+                <label class="form-label">Kata Sandi</label>
+                <div class="input-wrap">
+                    <span class="input-icon">🔒</span>
+                    <input class="form-input" type="password" id="login-pwd" placeholder="Masukkan kata sandi" autocomplete="current-password">
+                    <button class="toggle-pwd" type="button" onclick="togglePwd('login-pwd', this)">Lihat</button>
+                </div>
+                <div class="forgot-link" style="margin-top:8px;">
+                    <a href="#">Lupa kata sandi?</a>
+                </div>
+            </div>
+
+            <div class="checkbox-row">
+                <input type="checkbox" id="remember-me" checked>
+                <label for="remember-me">Ingat saya di perangkat ini</label>
+            </div>
+
+            <button class="submit-btn" id="login-btn" onclick="handleLogin()">
+                <span class="btn-text">Masuk ke Primafest</span>
+                <div class="btn-loader" id="login-loader"></div>
+            </button>
+
+            <div class="divider">atau masuk dengan</div>
+
+            <div class="social-row">
+                <a href="#" class="social-btn">🌐 Google</a>
+                <a href="#" class="social-btn">📘 Facebook</a>
+            </div>
+        </div>
+
+        <!-- ── REGISTER PANEL ── -->
+        <div class="form-panel" id="panel-register">
+            <div class="alert alert-error" id="register-error"></div>
+            <div class="alert alert-success" id="register-success"></div>
+
+            <!-- ROLE SELECTOR -->
+            <div>
+                <label class="form-label">Kamu mendaftar sebagai:</label>
+                <div class="role-select-row">
+                    <button class="role-btn selected" id="role-child" onclick="selectRole('child')">
+                        <span class="role-emoji">🧒</span>
+                        <span class="role-label">Pengguna / Anak</span>
+                        <span class="role-hint">Lacak moodmu sendiri</span>
+                    </button>
+                    <button class="role-btn" id="role-parent" onclick="selectRole('parent')">
+                        <span class="role-emoji">👨‍👩‍👧</span>
+                        <span class="role-label">Orang Tua</span>
+                        <span class="role-hint">Pantau mood keluarga</span>
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <label class="form-label">Nama Lengkap</label>
+                <div class="input-wrap">
+                    <span class="input-icon">👤</span>
+                    <input class="form-input" type="text" id="reg-name" placeholder="Nama lengkap kamu" autocomplete="name">
+                </div>
+            </div>
+
+            <div>
+                <label class="form-label">Email</label>
+                <div class="input-wrap">
+                    <span class="input-icon">📧</span>
+                    <input class="form-input" type="email" id="reg-email" placeholder="nama@email.com" autocomplete="email">
+                </div>
+            </div>
+
+            <div>
+                <label class="form-label">Kata Sandi</label>
+                <div class="input-wrap">
+                    <span class="input-icon">🔒</span>
+                    <input class="form-input" type="password" id="reg-pwd" placeholder="Min. 8 karakter" autocomplete="new-password" oninput="checkStrength(this.value)">
+                    <button class="toggle-pwd" type="button" onclick="togglePwd('reg-pwd', this)">Lihat</button>
+                </div>
+                <!-- Password strength bar -->
+                <div style="margin-top:8px; height:4px; border-radius:4px; background:rgba(255,255,255,0.08); overflow:hidden;">
+                    <div id="pwd-strength-bar" style="height:100%; width:0%; border-radius:4px; transition:all 0.3s ease;"></div>
+                </div>
+                <div id="pwd-strength-label" style="font-size:0.72rem; color:rgba(255,255,255,0.35); margin-top:4px;"></div>
+            </div>
+
+            <div class="checkbox-row">
+                <input type="checkbox" id="consent-data" required>
+                <label for="consent-data">Saya menyetujui <a href="#">Syarat Penggunaan</a> dan memberikan izin penyimpanan data mood saya sesuai <a href="#">Kebijakan Privasi</a> Primafest.</label>
+            </div>
+
+            <button class="submit-btn" id="register-btn" onclick="handleRegister()" style="background: linear-gradient(135deg, #00c3ff, #7c3aed);">
+                <span class="btn-text">Buat Akun Gratis</span>
+                <div class="btn-loader" id="register-loader"></div>
+            </button>
+        </div>
+
+        <!-- SUCCESS STATE -->
+        <div class="success-overlay" id="success-overlay">
+            <div class="success-icon">✅</div>
+            <div class="success-title" id="success-title">Berhasil Masuk!</div>
+            <p class="success-sub" id="success-msg">Mengarahkan kamu ke dashboard...</p>
+        </div>
+
+    </div>
+
+    <!-- FAMILY LINK QUICK ACCESS -->
+    <a href="family-link.html" class="quick-access">
+        <div class="qa-left">
+            <div class="qa-icon">👨‍👩‍👧</div>
+            <div>
+                <div class="qa-title">Family Link</div>
+                <div class="qa-sub">Pantau mood keluargamu</div>
+            </div>
+        </div>
+        <div class="qa-arrow">→</div>
+    </a>
+
+    <script>
+        // ── TAB SWITCHING ──
+        function switchTab(tab) {
+            ['login', 'register'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.toggle('active', t === tab);
+                document.getElementById(`panel-${t}`).classList.toggle('active', t === tab);
+            });
+            document.getElementById('success-overlay').style.display = 'none';
+        }
+
+        // Check for hash on load
+        if (window.location.hash === '#register') {
+            switchTab('register');
+        }
+
+        // ── ROLE SELECTION ──
+        let selectedRole = 'child';
+        function selectRole(role) {
+            selectedRole = role;
+            ['child', 'parent'].forEach(r => {
+                document.getElementById(`role-${r}`).classList.toggle('selected', r === role);
+            });
+        }
+
+        // ── TOGGLE PASSWORD VISIBILITY ──
+        function togglePwd(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const isText = input.type === 'text';
+            input.type = isText ? 'password' : 'text';
+            btn.textContent = isText ? 'Lihat' : 'Sembunyikan';
+        }
+
+        // ── PASSWORD STRENGTH ──
+        function checkStrength(val) {
+            const bar = document.getElementById('pwd-strength-bar');
+            const lbl = document.getElementById('pwd-strength-label');
+            let score = 0;
+            if (val.length >= 8) score++;
+            if (/[A-Z]/.test(val)) score++;
+            if (/[0-9]/.test(val)) score++;
+            if (/[^A-Za-z0-9]/.test(val)) score++;
+            const colors = ['#e74c3c', '#e67e22', '#f1c40f', '#2ecc71'];
+            const labels = ['Lemah', 'Cukup', 'Baik', 'Kuat'];
+            const pct = val.length === 0 ? 0 : (score / 4) * 100;
+            bar.style.width = pct + '%';
+            bar.style.background = val.length === 0 ? 'transparent' : colors[score - 1] || colors[0];
+            lbl.textContent = val.length === 0 ? '' : `Kekuatan: ${labels[score - 1] || labels[0]}`;
+        }
+
+        // ── LOGIN HANDLER ──
+        function handleLogin() {
+            const email = document.getElementById('login-email').value.trim();
+            const pwd = document.getElementById('login-pwd').value;
+            const errEl = document.getElementById('login-error');
+            const loader = document.getElementById('login-loader');
+            const btnText = document.querySelector('#panel-login .btn-text');
+
+            errEl.style.display = 'none';
+
+            if (!email || !pwd) {
+                showAlert(errEl, '⚠️ Harap isi semua kolom terlebih dahulu.');
+                return;
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showAlert(errEl, '⚠️ Format email tidak valid.');
+                return;
+            }
+
+            // Simulate loading
+            btnText.style.display = 'none';
+            loader.style.display = 'block';
+
+            setTimeout(() => {
+                btnText.style.display = 'block';
+                loader.style.display = 'none';
+
+                // Check stored users
+                const users = JSON.parse(localStorage.getItem('primafest-users') || '[]');
+                const user = users.find(u => u.email === email && u.password === pwd);
+
+                if (user || (email === 'demo@primafest.com' && pwd === 'demo123')) {
+                    const u = user || { name: 'Demo User', role: 'child', email };
+                    localStorage.setItem('primafest-current-user', JSON.stringify(u));
+                    showSuccess('Berhasil Masuk! 🎉', `Selamat datang kembali, ${u.name}! Mengarahkan ke dashboard...`);
+                    setTimeout(() => { window.location.href = 'index.html'; }, 1800);
+                } else {
+                    showAlert(errEl, '❌ Email atau kata sandi salah. Gunakan demo@primafest.com / demo123 untuk mencoba.');
+                }
+            }, 1200);
+        }
+
+        // ── REGISTER HANDLER ──
+        function handleRegister() {
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pwd = document.getElementById('reg-pwd').value;
+            const consent = document.getElementById('consent-data').checked;
+            const errEl = document.getElementById('register-error');
+            const sucEl = document.getElementById('register-success');
+            const loader = document.getElementById('register-loader');
+            const btnText = document.querySelector('#panel-register .btn-text');
+
+            errEl.style.display = 'none';
+            sucEl.style.display = 'none';
+
+            if (!name || !email || !pwd) {
+                showAlert(errEl, '⚠️ Harap isi semua kolom terlebih dahulu.');
+                return;
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showAlert(errEl, '⚠️ Format email tidak valid.');
+                return;
+            }
+
+            if (pwd.length < 8) {
+                showAlert(errEl, '⚠️ Kata sandi minimal 8 karakter.');
+                return;
+            }
+
+            if (!consent) {
+                showAlert(errEl, '⚠️ Kamu harus menyetujui syarat penggunaan dan kebijakan privasi.');
+                return;
+            }
+
+            // Simulate loading
+            btnText.style.display = 'none';
+            loader.style.display = 'block';
+
+            setTimeout(() => {
+                btnText.style.display = 'block';
+                loader.style.display = 'none';
+
+                const users = JSON.parse(localStorage.getItem('primafest-users') || '[]');
+
+                if (users.find(u => u.email === email)) {
+                    showAlert(errEl, '❌ Email ini sudah terdaftar. Coba masuk atau gunakan email lain.');
+                    return;
+                }
+
+                const newUser = { name, email, password: pwd, role: selectedRole, createdAt: new Date().toISOString() };
+                users.push(newUser);
+                localStorage.setItem('primafest-users', JSON.stringify(users));
+                localStorage.setItem('primafest-current-user', JSON.stringify(newUser));
+
+                showSuccess(`Selamat Datang, ${name}! 🎉`, 'Akun berhasil dibuat. Mengarahkan ke dashboard...');
+                setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+            }, 1400);
+        }
+
+        // ── HELPERS ──
+        function showAlert(el, msg) {
+            el.textContent = msg;
+            el.style.display = 'block';
+            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function showSuccess(title, msg) {
+            document.getElementById('panel-login').classList.remove('active');
+            document.getElementById('panel-register').classList.remove('active');
+            const overlay = document.getElementById('success-overlay');
+            overlay.style.display = 'flex';
+            document.getElementById('success-title').textContent = title;
+            document.getElementById('success-msg').textContent = msg;
+        }
+
+        // Enter key to submit
+        document.addEventListener('keydown', e => {
+            if (e.key !== 'Enter') return;
+            if (document.getElementById('tab-login').classList.contains('active')) handleLogin();
+            else handleRegister();
+        });
+    </script>
+</body>
+
+</html>

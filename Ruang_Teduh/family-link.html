@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primafest – Family Link</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Caveat:wght@600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cyan: #00c3ff;
+            --cyan-dark: #0077ff;
+            --green: #2ecc71;
+            --purple: #9b59b6;
+            --orange: #e67e22;
+            --red: #e74c3c;
+            --yellow: #f1c40f;
+            --bg: #0d1117;
+            --bg2: #161b22;
+            --card: rgba(255, 255, 255, 0.04);
+            --border: rgba(0, 195, 255, 0.22);
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d1117, #161b22);
+            font-family: 'Outfit', sans-serif;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 36px 20px 80px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(0, 195, 255, 0.07) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── HEADER ── */
+        .page-header {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1060px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 36px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(0,195,255,0.2);
+            border-radius: 12px;
+            color: rgba(255,255,255,0.75);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 9px 18px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .back-btn:hover {
+            border-color: rgba(0,195,255,0.5);
+            color: var(--cyan);
+            background: rgba(0,195,255,0.08);
+        }
+
+        .page-title-wrap h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 40%, var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-title-wrap p {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.4);
+            margin-top: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-invite {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--green), #27ae60);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 16px rgba(46,204,113,0.3);
+        }
+
+        .btn-invite:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(46,204,113,0.45);
+        }
+
+        /* ── MAIN CONTAINER ── */
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1060px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* ── PRIVACY NOTICE ── */
+        .privacy-banner {
+            background: linear-gradient(135deg, rgba(0,195,255,0.05), rgba(46,204,113,0.05));
+            border: 1px solid rgba(0,195,255,0.2);
+            border-radius: 16px;
+            padding: 18px 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .privacy-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .privacy-text h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .privacy-text p {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.5;
+        }
+
+        /* ── SECTION CARD ── */
+        .section-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            box-shadow:
+                0 0 0 1px rgba(0,195,255,0.06),
+                0 20px 50px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.05);
+            padding: 28px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .section-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            background: rgba(0,195,255,0.1);
+            border: 1px solid rgba(0,195,255,0.25);
+        }
+
+        .section-icon.green { background: rgba(46,204,113,0.1); border-color: rgba(46,204,113,0.25); }
+        .section-icon.purple { background: rgba(155,89,182,0.1); border-color: rgba(155,89,182,0.25); }
+
+        .section-title { font-size: 1.15rem; font-weight: 700; }
+        .section-sub { font-size: 0.8rem; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+        /* ── FAMILY MEMBERS GRID ── */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 18px;
+        }
+
+        .member-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .member-card.mood-happy::before { background: linear-gradient(90deg, #f9a8c9, #f472b6); }
+        .member-card.mood-excited::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+        .member-card.mood-calm::before { background: linear-gradient(90deg, #c4b5fd, #a78bfa); }
+        .member-card.mood-neutral::before { background: linear-gradient(90deg, #9ca3af, #6b7280); }
+        .member-card.mood-tired::before { background: linear-gradient(90deg, #78501a, #92400e); }
+        .member-card.mood-sad::before { background: linear-gradient(90deg, #3b5bdb, #1d4ed8); }
+        .member-card.mood-anxious::before { background: linear-gradient(90deg, #d4c5a9, #b59f7e); }
+        .member-card.mood-angry::before { background: linear-gradient(90deg, #800020, #dc2626); }
+        .member-card.mood-none::before { background: rgba(255,255,255,0.1); }
+
+        .member-card:hover {
+            border-color: rgba(0,195,255,0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        }
+
+        .member-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .member-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .avatar-status {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid var(--bg2);
+        }
+
+        .status-online { background: var(--green); }
+        .status-offline { background: rgba(255,255,255,0.2); }
+        .status-away { background: var(--yellow); }
+
+        .member-info { flex: 1; }
+
+        .member-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .member-role-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .badge-child { background: rgba(0,195,255,0.12); color: var(--cyan); border: 1px solid rgba(0,195,255,0.25); }
+        .badge-parent { background: rgba(46,204,113,0.12); color: var(--green); border: 1px solid rgba(46,204,113,0.25); }
+
+        .member-last-seen {
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.3);
+            margin-top: 3px;
+        }
+
+        .member-permission-badge {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .perm-full { background: rgba(46,204,113,0.12); color: var(--green); border: 1px solid rgba(46,204,113,0.2); }
+        .perm-limited { background: rgba(241,196,15,0.1); color: var(--yellow); border: 1px solid rgba(241,196,15,0.2); }
+        .perm-pending { background: rgba(230,126,34,0.1); color: var(--orange); border: 1px solid rgba(230,126,34,0.2); }
+
+        /* MOOD DISPLAY */
+        .member-mood-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .mood-box-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 10px;
+        }
+
+        .mood-main-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mood-big-emoji {
+            font-size: 2.2rem;
+            line-height: 1;
+        }
+
+        .mood-main-label {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .mood-main-desc {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 2px;
+        }
+
+        /* WEEKLY MINI CHART */
+        .weekly-chart {
+            display: flex;
+            gap: 5px;
+            align-items: flex-end;
+            margin-top: 12px;
+        }
+
+        .chart-bar-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .chart-emoji {
+            font-size: 0.75rem;
+            line-height: 1;
+        }
+
+        .chart-bar {
+            width: 100%;
+            min-height: 4px;
+            border-radius: 4px;
+            transition: height 0.3s ease;
+        }
+
+        .chart-day {
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.25);
+            font-weight: 600;
+        }
+
+        /* CONCLUSION BOX */
+        .member-conclusion {
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 0.83rem;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .conclusion-positive {
+            background: rgba(46,204,113,0.08);
+            border: 1px solid rgba(46,204,113,0.2);
+            color: rgba(255,255,255,0.8);
+        }
+
+        .conclusion-neutral {
+            background: rgba(241,196,15,0.08);
+            border: 1px solid rgba(241,196,15,0.2);
+            color: rgba(255,255,255,0.8);
+        }
+
+        .conclusion-needs-attention {
+            background: rgba(230,126,34,0.08);
+            border: 1px solid rgba(230,126,34,0.2);
+            color: rgba(255,255,255,0.8);
+        }
+
+        .member-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 9px 12px;
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(0,195,255,0.25);
+            background: rgba(0,195,255,0.05);
+            color: rgba(255,255,255,0.75);
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            background: rgba(0,195,255,0.15);
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .action-btn.danger {
+            border-color: rgba(231,76,60,0.2);
+            background: rgba(231,76,60,0.04);
+            color: rgba(255,255,255,0.4);
+        }
+
+        .action-btn.danger:hover {
+            border-color: rgba(231,76,60,0.5);
+            background: rgba(231,76,60,0.12);
+            color: var(--red);
+        }
+
+        /* ADD MEMBER CARD */
+        .add-member-card {
+            background: rgba(255,255,255,0.02);
+            border: 1.5px dashed rgba(255,255,255,0.12);
+            border-radius: 20px;
+            padding: 40px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: center;
+        }
+
+        .add-member-card:hover {
+            border-color: rgba(46,204,113,0.4);
+            background: rgba(46,204,113,0.04);
+        }
+
+        .add-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(46,204,113,0.1);
+            border: 1.5px dashed rgba(46,204,113,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .add-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.65);
+        }
+
+        .add-hint {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.3);
+        }
+
+        /* ── PERMISSION OVERVIEW TABLE ── */
+        .perm-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .perm-table th {
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: rgba(0,195,255,0.7);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .perm-table td {
+            padding: 14px;
+            font-size: 0.88rem;
+            color: rgba(255,255,255,0.8);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .perm-table tr:last-child td { border-bottom: none; }
+
+        .perm-table tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .perm-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Toggle switch */
+        .toggle-switch {
+            position: relative;
+            width: 40px;
+            height: 22px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 22px;
+            transition: 0.3s;
+        }
+
+        .slider::before {
+            content: '';
+            position: absolute;
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        input:checked + .slider {
+            background: rgba(46,204,113,0.5);
+        }
+
+        input:checked + .slider::before {
+            transform: translateX(18px);
+            background: var(--green);
+        }
+
+        .toggle-label {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* ── INVITE MODAL ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: #161b22;
+            border: 1px solid rgba(0,195,255,0.25);
+            border-radius: 24px;
+            padding: 36px;
+            width: 100%;
+            max-width: 420px;
+            transform: translateY(20px);
+            transition: transform 0.25s ease;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,195,255,0.06);
+        }
+
+        .modal-overlay.open .modal {
+            transform: translateY(0);
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .modal-sub {
+            font-size: 0.83rem;
+            color: rgba(255,255,255,0.45);
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        .modal-field {
+            margin-bottom: 18px;
+        }
+
+        .modal-label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 8px;
+            letter-spacing: 0.3px;
+        }
+
+        .modal-input {
+            width: 100%;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(0,195,255,0.2);
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            padding: 12px 16px;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .modal-input:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px rgba(0,195,255,0.12);
+        }
+
+        .modal-input::placeholder {
+            color: rgba(255,255,255,0.2);
+        }
+
+        .modal-role-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .modal-role-btn {
+            padding: 12px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.55);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .modal-role-btn:hover {
+            border-color: rgba(0,195,255,0.3);
+            color: rgba(255,255,255,0.8);
+        }
+
+        .modal-role-btn.selected {
+            border-color: var(--cyan);
+            background: rgba(0,195,255,0.1);
+            color: var(--cyan);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: rgba(255,255,255,0.6);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+
+        .btn-send-invite {
+            flex: 2;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--green), #27ae60);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 16px rgba(46,204,113,0.3);
+        }
+
+        .btn-send-invite:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(46,204,113,0.45);
+        }
+
+        /* ── TOAST ── */
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(22, 27, 34, 0.95);
+            border: 1px solid rgba(0,195,255,0.3);
+            border-radius: 14px;
+            padding: 14px 24px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #fff;
+            opacity: 0;
+            transition: all 0.35s ease;
+            z-index: 300;
+            backdrop-filter: blur(16px);
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 640px) {
+            .members-grid { grid-template-columns: 1fr; }
+            .perm-table { font-size: 0.8rem; }
+            .modal { padding: 24px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="page-header">
+        <div class="header-left">
+            <a href="index.html" class="back-btn">
+                ← Dashboard
+            </a>
+            <div class="page-title-wrap">
+                <h1>👨‍👩‍👧 Family Link</h1>
+                <p>Pantau kesehatan mental anggota keluargamu</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="btn-invite" onclick="openInviteModal()">
+                ➕ Undang Anggota
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="container">
+
+        <!-- PRIVACY NOTICE -->
+        <div class="privacy-banner">
+            <div class="privacy-icon">🔒</div>
+            <div class="privacy-text">
+                <h3>Data Dibagikan dengan Izin Terbatas</h3>
+                <p>Setiap anggota keluarga mengontrol data apa yang mereka bagikan. Orang tua hanya dapat melihat ringkasan mood — bukan catatan pribadi — kecuali anak memberikan izin penuh. Semua koneksi memerlukan persetujuan dua arah.</p>
+            </div>
+        </div>
+
+        <!-- FAMILY MEMBERS -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-title-wrap">
+                    <div class="section-icon green">👥</div>
+                    <div>
+                        <div class="section-title">Anggota Keluarga</div>
+                        <div class="section-sub" id="member-count">Memuat data...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="members-grid" id="members-grid">
+                <!-- Dynamically rendered -->
+            </div>
+        </div>
+
+        <!-- PERMISSION SETTINGS -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-title-wrap">
+                    <div class="section-icon purple">⚙️</div>
+                    <div>
+                        <div class="section-title">Pengaturan Izin Data</div>
+                        <div class="section-sub">Kontrol data apa yang kamu bagikan dengan anggota keluarga lain</div>
+                    </div>
+                </div>
+            </div>
+
+            <table class="perm-table">
+                <thead>
+                    <tr>
+                        <th>Data yang Dibagikan</th>
+                        <th>Deskripsi</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>😊 Mood Harian</td>
+                        <td style="color:rgba(255,255,255,0.45); font-size:0.8rem;">Emoji dan label mood hari ini</td>
+                        <td>
+                            <div class="perm-toggle">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="perm-daily-mood" checked onchange="savePermissions()">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="toggle-label">Aktif</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>📊 Ringkasan Mingguan</td>
+                        <td style="color:rgba(255,255,255,0.45); font-size:0.8rem;">Tren mood 7 hari terakhir</td>
+                        <td>
+                            <div class="perm-toggle">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="perm-weekly" checked onchange="savePermissions()">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="toggle-label">Aktif</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>📝 Catatan Mood Pribadi</td>
+                        <td style="color:rgba(255,255,255,0.45); font-size:0.8rem;">Teks deskripsi mood harianmu</td>
+                        <td>
+                            <div class="perm-toggle">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="perm-notes" onchange="savePermissions()">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="toggle-label">Nonaktif</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>📅 Detail Aktivitas</td>
+                        <td style="color:rgba(255,255,255,0.45); font-size:0.8rem;">Aktivitas dan event yang dicatat</td>
+                        <td>
+                            <div class="perm-toggle">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="perm-activity" onchange="savePermissions()">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="toggle-label">Nonaktif</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>🤖 Percakapan AI</td>
+                        <td style="color:rgba(255,255,255,0.45); font-size:0.8rem;">Riwayat chat dengan AI advisor</td>
+                        <td>
+                            <div class="perm-toggle">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="perm-ai" onchange="savePermissions()">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="toggle-label">Nonaktif</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <!-- INVITE MODAL -->
+    <div class="modal-overlay" id="invite-modal">
+        <div class="modal">
+            <div class="modal-title">Undang Anggota Keluarga</div>
+            <p class="modal-sub">Kirim undangan melalui email. Mereka perlu menerima undanganmu untuk terhubung.</p>
+
+            <div class="modal-field">
+                <label class="modal-label">Email Anggota</label>
+                <input class="modal-input" type="email" id="invite-email" placeholder="nama@email.com">
+            </div>
+
+            <div class="modal-field">
+                <label class="modal-label">Hubungan</label>
+                <div class="modal-role-row">
+                    <button class="modal-role-btn selected" id="rel-child" onclick="selectRelation('child')">🧒 Anak Saya</button>
+                    <button class="modal-role-btn" id="rel-parent" onclick="selectRelation('parent')">👴 Orang Tua</button>
+                    <button class="modal-role-btn" id="rel-sibling" onclick="selectRelation('sibling')">👧 Saudara</button>
+                    <button class="modal-role-btn" id="rel-other" onclick="selectRelation('other')">👤 Lainnya</button>
+                </div>
+            </div>
+
+            <div class="modal-field">
+                <label class="modal-label">Izin Awal yang Diberikan</label>
+                <div class="perm-toggle" style="gap:14px; flex-wrap:wrap;">
+                    <div class="perm-toggle">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="invite-perm-mood" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="toggle-label" style="font-size:0.78rem;">Mood Harian</span>
+                    </div>
+                    <div class="perm-toggle">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="invite-perm-weekly" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="toggle-label" style="font-size:0.78rem;">Ringkasan Mingguan</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeInviteModal()">Batal</button>
+                <button class="btn-send-invite" onclick="sendInvite()">📨 Kirim Undangan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ── MOOD DATA ──
+        const MOODS = {
+            happy:   { emoji: '😊', label: 'Senang',    color: '#f9a8c9', type: 'positive', score: 5 },
+            excited: { emoji: '🤩', label: 'Excited',   color: '#3b82f6', type: 'positive', score: 5 },
+            calm:    { emoji: '😌', label: 'Tenang',    color: '#c4b5fd', type: 'positive', score: 4 },
+            neutral: { emoji: '😐', label: 'Netral',    color: '#9ca3af', type: 'neutral',  score: 3 },
+            tired:   { emoji: '😴', label: 'Lelah',     color: '#78501a', type: 'low',      score: 2 },
+            sad:     { emoji: '😢', label: 'Sedih',     color: '#3b5bdb', type: 'low',      score: 1 },
+            anxious: { emoji: '😰', label: 'Cemas',     color: '#d4c5a9', type: 'low',      score: 1 },
+            angry:   { emoji: '😠', label: 'Marah',     color: '#800020', type: 'low',      score: 1 },
+        };
+
+        const DAYS = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+
+        // ── SAMPLE FAMILY DATA ──
+        // In a real app this would come from a backend/API
+        const sampleFamily = [
+            {
+                id: 'me',
+                name: 'Kamu (Pengguna)',
+                role: 'child',
+                avatar: '🧑',
+                status: 'online',
+                relation: 'Saya',
+                permission: 'full',
+                lastSeen: 'Sekarang',
+                weekMoods: ['happy', 'calm', 'excited', 'happy', 'neutral', 'happy', 'calm'],
+                todayMood: 'happy',
+                todayDesc: 'Hari yang menyenangkan!'
+            },
+            {
+                id: 'parent1',
+                name: 'Ibu Sari',
+                role: 'parent',
+                avatar: '👩',
+                status: 'online',
+                relation: 'Orang Tua',
+                permission: 'limited',
+                lastSeen: '5 menit lalu',
+                weekMoods: ['calm', 'neutral', 'calm', 'happy', 'tired', 'calm', 'happy'],
+                todayMood: 'happy',
+                todayDesc: 'Senang bisa lihat keluarga baik-baik'
+            },
+            {
+                id: 'sibling1',
+                name: 'Adik Dino',
+                role: 'child',
+                avatar: '👦',
+                status: 'away',
+                relation: 'Saudara',
+                permission: 'limited',
+                lastSeen: '1 jam lalu',
+                weekMoods: ['excited', 'happy', 'neutral', 'sad', 'anxious', 'neutral', 'calm'],
+                todayMood: 'calm',
+                todayDesc: 'Sudah lebih baik dari kemarin'
+            },
+        ];
+
+        // ── RENDER MEMBERS ──
+        function renderMembers() {
+            const grid = document.getElementById('members-grid');
+            const countEl = document.getElementById('member-count');
+            countEl.textContent = `${sampleFamily.length} anggota terhubung`;
+            grid.innerHTML = '';
+
+            sampleFamily.forEach(member => {
+                const moodData = MOODS[member.todayMood] || null;
+                const moodClass = member.todayMood ? `mood-${member.todayMood}` : 'mood-none';
+
+                // Determine conclusion
+                const scores = member.weekMoods.map(m => (MOODS[m] || {}).score || 3);
+                const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+                let conclusionClass, conclusionText;
+                if (avgScore >= 4) {
+                    conclusionClass = 'conclusion-positive';
+                    conclusionText = '✅ Mood minggu ini sangat positif! Pertahankan rutinitas dan aktivitas yang menyenangkan.';
+                } else if (avgScore >= 3) {
+                    conclusionClass = 'conclusion-neutral';
+                    conclusionText = '⚡ Mood cukup stabil minggu ini. Coba tambah satu aktivitas menyenangkan untuk semangat lebih.';
+                } else {
+                    conclusionClass = 'conclusion-needs-attention';
+                    conclusionText = '⚠️ Mood perlu perhatian. Ada beberapa hari yang berat — yuk ajak bicara dan cari tahu apa yang dirasakan.';
+                }
+
+                // Build weekly chart bars
+                const chartBars = member.weekMoods.map((m, i) => {
+                    const md = MOODS[m] || { emoji: '⬜', color: 'rgba(255,255,255,0.1)' };
+                    const height = ((md.score || 3) / 5) * 36 + 4;
+                    return `
+                        <div class="chart-bar-wrap">
+                            <span class="chart-emoji">${md.emoji}</span>
+                            <div class="chart-bar" style="height:${height}px; background:${md.color}88;"></div>
+                            <span class="chart-day">${DAYS[i]}</span>
+                        </div>
+                    `;
+                }).join('');
+
+                const permLabels = {
+                    full: ['perm-full', '🔓 Akses Penuh'],
+                    limited: ['perm-limited', '🔐 Akses Terbatas'],
+                    pending: ['perm-pending', '⏳ Menunggu']
+                };
+                const [permClass, permText] = permLabels[member.permission] || permLabels.limited;
+
+                const statusClass = { online: 'status-online', offline: 'status-offline', away: 'status-away' }[member.status];
+
+                grid.innerHTML += `
+                    <div class="member-card ${moodClass}">
+                        <div class="member-top">
+                            <div class="member-avatar" style="background: ${moodData ? moodData.color + '22' : 'rgba(255,255,255,0.06)'}; border: 1.5px solid ${moodData ? moodData.color + '55' : 'rgba(255,255,255,0.1)'};">
+                                ${member.avatar}
+                                <div class="avatar-status ${statusClass}"></div>
+                            </div>
+                            <div class="member-info">
+                                <div class="member-name">${member.name}</div>
+                                <div class="member-role-badge ${member.role === 'parent' ? 'badge-parent' : 'badge-child'}">
+                                    ${member.role === 'parent' ? '👨‍👩‍👧 Orang Tua' : '🧒 Anak / Anggota'}
+                                </div>
+                                <div class="member-last-seen">🕐 ${member.lastSeen}</div>
+                            </div>
+                            <span class="member-permission-badge ${permClass}">${permText}</span>
+                        </div>
+
+                        <div class="member-mood-box">
+                            <div class="mood-box-label">Mood Hari Ini</div>
+                            <div class="mood-main-row">
+                                <span class="mood-big-emoji">${moodData ? moodData.emoji : '❓'}</span>
+                                <div>
+                                    <div class="mood-main-label">${moodData ? moodData.label : 'Belum Dicatat'}</div>
+                                    <div class="mood-main-desc">${member.todayDesc || ''}</div>
+                                </div>
+                            </div>
+                            <div class="weekly-chart">
+                                ${chartBars}
+                            </div>
+                        </div>
+
+                        <div class="member-conclusion ${conclusionClass}">
+                            ${conclusionText}
+                        </div>
+
+                        <div class="member-actions">
+                            <button class="action-btn" onclick="showToast('Fitur chat akan segera hadir! 💬')">💬 Chat</button>
+                            <button class="action-btn" onclick="showToast('Saran untuk ${member.name} dikirim ke AI 🤖')">🤖 Minta Saran AI</button>
+                            ${member.id !== 'me' ? `<button class="action-btn danger" onclick="removeConfirm('${member.id}', '${member.name}')">✕</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Add "Add Member" card
+            grid.innerHTML += `
+                <div class="add-member-card" onclick="openInviteModal()">
+                    <div class="add-icon">➕</div>
+                    <div class="add-label">Undang Anggota Keluarga</div>
+                    <div class="add-hint">Hubungkan dengan orang tua, anak, atau saudara</div>
+                </div>
+            `;
+        }
+
+        // ── PERMISSIONS ──
+        function savePermissions() {
+            const perms = {
+                daily: document.getElementById('perm-daily-mood').checked,
+                weekly: document.getElementById('perm-weekly').checked,
+                notes: document.getElementById('perm-notes').checked,
+                activity: document.getElementById('perm-activity').checked,
+                ai: document.getElementById('perm-ai').checked,
+            };
+            localStorage.setItem('primafest-family-perms', JSON.stringify(perms));
+
+            // Update labels
+            document.querySelectorAll('.toggle-switch input').forEach(inp => {
+                const lbl = inp.closest('.perm-toggle')?.querySelector('.toggle-label');
+                if (lbl) lbl.textContent = inp.checked ? 'Aktif' : 'Nonaktif';
+            });
+
+            showToast('✅ Pengaturan izin disimpan');
+        }
+
+        function loadPermissions() {
+            const saved = JSON.parse(localStorage.getItem('primafest-family-perms') || '{}');
+            if (saved.daily !== undefined) document.getElementById('perm-daily-mood').checked = saved.daily;
+            if (saved.weekly !== undefined) document.getElementById('perm-weekly').checked = saved.weekly;
+            if (saved.notes !== undefined) document.getElementById('perm-notes').checked = saved.notes;
+            if (saved.activity !== undefined) document.getElementById('perm-activity').checked = saved.activity;
+            if (saved.ai !== undefined) document.getElementById('perm-ai').checked = saved.ai;
+        }
+
+        // ── INVITE MODAL ──
+        let selectedRelation = 'child';
+
+        function openInviteModal() {
+            document.getElementById('invite-modal').classList.add('open');
+        }
+
+        function closeInviteModal() {
+            document.getElementById('invite-modal').classList.remove('open');
+            document.getElementById('invite-email').value = '';
+        }
+
+        function selectRelation(rel) {
+            selectedRelation = rel;
+            ['child', 'parent', 'sibling', 'other'].forEach(r => {
+                document.getElementById(`rel-${r}`)?.classList.toggle('selected', r === rel);
+            });
+        }
+
+        function sendInvite() {
+            const email = document.getElementById('invite-email').value.trim();
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showToast('⚠️ Masukkan email yang valid');
+                return;
+            }
+            closeInviteModal();
+            showToast(`📨 Undangan dikirim ke ${email}! Menunggu konfirmasi...`);
+        }
+
+        // ── REMOVE CONFIRM ──
+        function removeConfirm(id, name) {
+            if (confirm(`Hapus ${name} dari Family Link? Mereka tidak akan bisa melihat datamu lagi.`)) {
+                showToast(`🔓 ${name} dihapus dari Family Link`);
+            }
+        }
+
+        // ── TOAST ──
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // ── CLOSE MODAL ON OVERLAY CLICK ──
+        document.getElementById('invite-modal').addEventListener('click', function (e) {
+            if (e.target === this) closeInviteModal();
+        });
+
+        // ── INIT ──
+        renderMembers();
+        loadPermissions();
+    </script>
+</body>
+
+</html>
